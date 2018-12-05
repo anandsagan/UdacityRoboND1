@@ -77,7 +77,13 @@ def find_rock(img, lower_thresh, upper_thresh):
     return mask, res
 ```
 
-Then using the coordinates for the rocks, path, and obstacles, the `pix_to_world` function returns a worldmap of the all the components. The world map shows the path in red, obstacles in blue, and rocks in white. The output video can be found in the output folder of this repository.
+The goal of the `process_image` function was to get the logic down for mapping and locating the rocks. Using the supporting functions such as `perspect_transform`, `color_thresh`, `find_rock`, and `rover_coords`, I was able to determine the detect the path, obstacles, and rocks. Then, using the `pix_to_world` function, we can translate these locations into a world map using the Rover's roll, pitch, and yaw, as follows:
+```sh
+    x_worldpix,y_worldpix = pix_to_world(x_pixel,y_pixel,data.xpos[data.count],data.ypos[data.count],data.yaw[data.count],world_size,scale)
+    x_worldobspix,y_worldobspix = pix_to_world(x_obspix,y_obspix,data.xpos[data.count],data.ypos[data.count],data.yaw[data.count],world_size,scale)
+    x_worldrock,y_worldrock = pix_to_world(x_rockpix,y_rockpix,data.xpos[data.count],data.ypos[data.count],data.yaw[data.count],world_size,scale)
+```
+We get a worldmap on top of the ground truth map by overlaying in color the path, obstacles, and rocks. The world map shows the path in red, obstacles in blue, and rocks in white. The output video can be found in the output folder of this repository.
 
 ### Autonomous Navigation and Mapping
 The `perception_step()` is similar to the process_image() function in the Rover test notebook, but it only contains the key variables and elements. It returns Rover, which updates the values in `drive_rover.py` so it can be accessed by `decision.py`. 
