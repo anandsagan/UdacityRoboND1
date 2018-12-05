@@ -52,11 +52,13 @@ Then launch the simulator and choose "Autonomous Mode".  The rover should drive 
 There were two parts to this project that were to be fulfilled, the Notebook analysis and the autonomous navigation and mapping. Majority of the analysis was first testing in the `process_image()` in the Rover notebook and transferred into the perception_step function. The decision_step function provides the rover with the best course of action given the circumstance.
 
 ### Notebook Analysis
-The obstacle identification that I implemented is fairly straighforward.  The `color_thresh` function of `perception.py` returns the path as well as the obstacle. Here is the part of the code that implements obstacle detection: ```sh
+The obstacle identification that I implemented is fairly straighforward.  The `color_thresh` function of `perception.py` returns the path as well as the obstacle. Here is the part of the code that implements obstacle detection: 
+```sh
     below_thresh = (img[:,:,0] < rgb_thresh[0]) \
                  & (img[:,:,1] < rgb_thresh[1]) \
                  & (img[:,:,2] < rgb_thresh[2])
 ```
+
 It uses the same threshold as the path detection and wherever it was below the specified RGB threshold (160,160,160), it's an obstacle. The `find_rock` function in the `perception.py` file contains the method to find a rock. I implemented an HSV filter to identify the rocks in the warped image. The lower and upper limits of the yellow filter in HSV are [90,100,100] and [100,255,255], respectively. Here's the code for rock detection: ```sh
 def find_rock(img, lower_thresh, upper_thresh):
     dst_size = 5 
@@ -80,12 +82,5 @@ The `perception_step()` is similar to the process_image() function in the Rover 
 The `decision_step()` function determines what the rover does when Rover is updated. The key functionalities I added allows the rover to navigate to and pick up rocks when they are visible. If there are no rocks present and there is room to go forward, the throttle is set to 0.3 and steers towards the average direction of the visible path. If there's no room to go forward, the rover stops and turns 15 degrees until it can seem some of the path.
 
 There are two main modes for the Rover, forward and stop. It goes forward when there is room to move and stops when there isn't. Sometimes, when the rock is in a corner, the Rover.mode will be stop, but it will keep incrementing forward until it has picked up the rock.
-
-
-
-
-
-
-
 
 
