@@ -59,7 +59,9 @@ The obstacle identification that I implemented is fairly straighforward.  The `c
                  & (img[:,:,2] < rgb_thresh[2])
 ```
 
-It uses the same threshold as the path detection and wherever it was below the specified RGB threshold (160,160,160), it's an obstacle. The `find_rock` function in the `perception.py` file contains the method to find a rock. I implemented an HSV filter to identify the rocks in the warped image. The lower and upper limits of the yellow filter in HSV are [90,100,100] and [100,255,255], respectively. Here's the code for rock detection: ```sh
+It uses the same threshold as the path detection and wherever it was below the specified RGB threshold (160,160,160), it's an obstacle. The `find_rock` function in the `perception.py` file contains the method to find a rock. I implemented an HSV filter to identify the rocks in the warped image. The lower and upper limits of the yellow filter in HSV are [90,100,100] and [100,255,255], respectively. Here's the code for rock detection: 
+
+```sh
 def find_rock(img, lower_thresh, upper_thresh):
     dst_size = 5 
     bottom_offset = 6
@@ -74,6 +76,7 @@ def find_rock(img, lower_thresh, upper_thresh):
     res = cv2.bitwise_and(img,img, mask = mask)
     return mask, res
 ```
+
 Then using the coordinates for the rocks, path, and obstacles, the `pix_to_world` function returns a worldmap of the all the components. The world map shows the path in red, obstacles in blue, and rocks in white. The output video can be found in the output folder of this repository.
 
 ### Autonomous Navigation and Mapping
