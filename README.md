@@ -54,9 +54,9 @@ There were two parts to this project that were to be fulfilled, the Notebook ana
 ### Notebook Analysis
 The obstacle identification that I implemented is fairly straighforward.  The `color_thresh` function of `perception.py` returns the path as well as the obstacle. Here is the part of the code that implements obstacle detection: 
 ```sh
-    below_thresh = (img[:,:,0] < rgb_thresh[0]) \
-                 & (img[:,:,1] < rgb_thresh[1]) \
-                 & (img[:,:,2] < rgb_thresh[2])
+below_thresh = (img[:,:,0] < rgb_thresh[0]) \
+             & (img[:,:,1] < rgb_thresh[1]) \
+             & (img[:,:,2] < rgb_thresh[2])
 ```
 
 It uses the same threshold as the path detection and wherever it was below the specified RGB threshold (160,160,160), it's an obstacle. The `find_rock` function in the `perception.py` file contains the method to find a rock. I implemented an HSV filter to identify the rocks in the warped image. The lower and upper limits of the yellow filter in HSV are [90,100,100] and [100,255,255], respectively. Here's the code for rock detection: 
@@ -79,9 +79,9 @@ def find_rock(img, lower_thresh, upper_thresh):
 
 The goal of the `process_image` function was to get the logic down for mapping and locating the rocks. Using the supporting functions such as `perspect_transform`, `color_thresh`, `find_rock`, and `rover_coords`, I was able to determine the detect the path, obstacles, and rocks. Then, using the `pix_to_world` function, we can translate these locations into a world map using the Rover's roll, pitch, and yaw, as follows:
 ```sh
-    x_worldpix,y_worldpix = pix_to_world(x_pixel,y_pixel,data.xpos[data.count],data.ypos[data.count],data.yaw[data.count],world_size,scale)
-    x_worldobspix,y_worldobspix = pix_to_world(x_obspix,y_obspix,data.xpos[data.count],data.ypos[data.count],data.yaw[data.count],world_size,scale)
-    x_worldrock,y_worldrock = pix_to_world(x_rockpix,y_rockpix,data.xpos[data.count],data.ypos[data.count],data.yaw[data.count],world_size,scale)
+x_worldpix,y_worldpix = pix_to_world(x_pixel,y_pixel,data.xpos[data.count],data.ypos[data.count],data.yaw[data.count],world_size,scale)
+x_worldobspix,y_worldobspix = pix_to_world(x_obspix,y_obspix,data.xpos[data.count],data.ypos[data.count],data.yaw[data.count],world_size,scale)
+x_worldrock,y_worldrock = pix_to_world(x_rockpix,y_rockpix,data.xpos[data.count],data.ypos[data.count],data.yaw[data.count],world_size,scale)
 ```
 We get a worldmap on top of the ground truth map by overlaying in color the path, obstacles, and rocks. The world map shows the path in red, obstacles in blue, and rocks in white. The output video can be found in the output folder of this repository.
 
